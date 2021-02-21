@@ -31,6 +31,7 @@ LevelMaker = Class{}
     brick colors and tiers to choose based on the level passed in.
 ]]
 function LevelMaker.createMap(level)
+    local levelMap = {}
     local bricks = {}
 
     -- randomly choose the number of rows
@@ -46,6 +47,14 @@ function LevelMaker.createMap(level)
 
     -- highest color of the highest tier, no higher than 5
     local highestColor = math.min(5, level % 5 + 3)
+
+    local lockedColPos = 0
+    local lockedRowPos = 0
+    local hasLock = true
+    if hasLock then
+        lockedColPos = math.random(1, numCols)
+        lockedRowPos = math.random(1, numRows)
+    end
 
     -- lay out bricks such that they touch each other and fill the space
     for y = 1, numRows do
@@ -77,6 +86,9 @@ function LevelMaker.createMap(level)
                 -- turn skipping off for the next iteration
                 skipFlag = not skipFlag
 
+                if x == lockedColPos then
+                    lockedColPos = lockedColPos + 1
+                end
                 -- Lua doesn't have a continue statement, so this is the workaround
                 goto continue
             else
@@ -112,6 +124,15 @@ function LevelMaker.createMap(level)
                 b.tier = solidTier
             end 
 
+            if lockedColPos == x and lockedRowPos == y then
+                b.color = 5
+                b.tier = 3
+                b.lockedPos = 2
+                b.isLocked = true
+            end
+
+            b.colorVal = b.color
+            b.tierVal = b.tier
             table.insert(bricks, b)
 
             -- Lua's version of the 'continue' statement
@@ -123,6 +144,8 @@ function LevelMaker.createMap(level)
     if #bricks == 0 then
         return self.createMap(level)
     else
-        return bricks
+        levelMap.bricks = bricks
+        levelMap.hasLock = hasLock
+        return levelMap
     end
 end

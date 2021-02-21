@@ -66,7 +66,8 @@ function love.load()
         ['paddles'] = GenerateQuadsPaddles(gTextures['main']),
         ['balls'] = GenerateQuadsBalls(gTextures['main']),
         ['bricks'] = GenerateQuadsBricks(gTextures['main']),
-        ['hearts'] = GenerateQuads(gTextures['hearts'], 10, 9)
+        ['hearts'] = GenerateQuads(gTextures['hearts'], 10, 9),
+        ['powerups'] = GenerateQuadsPowerups(gTextures['main'])
     }
     
     -- initialize our virtual resolution, which will be rendered within our
@@ -301,4 +302,11 @@ function renderScore(score)
     love.graphics.setFont(gFonts['small'])
     love.graphics.print('Score:', VIRTUAL_WIDTH - 60, 5)
     love.graphics.printf(tostring(score), VIRTUAL_WIDTH - 50, 5, 40, 'right')
+end
+
+--draws the key icon onto the screen
+function renderKeyPowerup()
+    local powerX = 2
+    local powerY = VIRTUAL_HEIGHT - 18
+    love.graphics.draw(gTextures['main'], gFrames['powerups'][10], powerX, powerY)
 end

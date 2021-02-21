@@ -54,6 +54,11 @@ function Brick:init(x, y)
     -- used for coloring and score calculation
     self.tier = 0
     self.color = 1
+
+    self.colorVal = self.color
+    self.tierVal = self.tier
+    self.lockedPos = 0
+    self.isLocked = false
     
     self.x = x
     self.y = y
@@ -84,7 +89,15 @@ end
     Triggers a hit on the brick, taking it out of play if at 0 health or
     changing its color otherwise.
 ]]
-function Brick:hit()
+function Brick:hit(key)
+    -- sound on hit
+    gSounds['brick-hit-2']:stop()
+    gSounds['brick-hit-2']:play()
+
+    if self.isLocked and not key then
+        return
+    end
+
     -- set the particle system to interpolate between two colors; in this case, we give
     -- it our self.color but with varying alpha; brighter for higher tiers, fading to 0
     -- over the particle's lifetime (the second color)
@@ -100,13 +113,13 @@ function Brick:hit()
     )
     self.psystem:emit(64)
 
-    -- sound on hit
-    gSounds['brick-hit-2']:stop()
-    gSounds['brick-hit-2']:play()
+
+    if self.isLocked and key then
+        self.inPlay = false
 
     -- if we're at a higher tier than the base, we need to go down a tier
     -- if we're already at the lowest color, else just go down a color
-    if self.tier > 0 then
+    elseif self.tier > 0 then
         if self.color == 1 then
             self.tier = self.tier - 1
             self.color = 5
@@ -138,7 +151,7 @@ function Brick:render()
         love.graphics.draw(gTextures['main'], 
             -- multiply color by 4 (-1) to get our color offset, then add tier to that
             -- to draw the correct tier and color brick onto the screen
-            gFrames['bricks'][1 + ((self.color - 1) * 4) + self.tier],
+            gFrames['bricks'][1 + ((self.color - 1) * 4) + self.tier + self.lockedPos],
             self.x, self.y)
     end
 end

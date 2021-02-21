@@ -16,6 +16,7 @@ PaddleSelectState = Class{__includes = BaseState}
 
 function PaddleSelectState:enter(params)
     self.highScores = params.highScores
+    self.levelMap = LevelMaker.createMap(1)
 end
 
 function PaddleSelectState:init()
@@ -47,12 +48,13 @@ function PaddleSelectState:update(dt)
 
         gStateMachine:change('serve', {
             paddle = Paddle(self.currentPaddle),
-            bricks = LevelMaker.createMap(1),
+            bricks = self.levelMap.bricks,
             health = 3,
             score = 0,
             highScores = self.highScores,
             level = 1,
-            recoverPoints = 5000
+            recoverPoints = 5000,
+            hasLock = self.levelMap.hasLock
         })
     end
 
