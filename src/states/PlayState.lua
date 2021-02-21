@@ -196,7 +196,9 @@ function PlayState:update(dt)
     for k, powerup in pairs(self.powerups) do
         if powerup:collides(self.paddle) then
 
-            self.score + self.score + 200
+            gSounds['score']:play()
+
+            self.score = self.score + 200
 
             if powerup.skin == 10 then
                 self.key = true

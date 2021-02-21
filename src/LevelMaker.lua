@@ -50,7 +50,7 @@ function LevelMaker.createMap(level)
 
     local lockedColPos = 0
     local lockedRowPos = 0
-    local hasLock = true
+    local hasLock = math.random(1,3) == 1
     if hasLock then
         lockedColPos = math.random(1, numCols)
         lockedRowPos = math.random(1, numRows)
