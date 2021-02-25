@@ -42,9 +42,10 @@ end
 
 function PlayState:update(dt)
 
-    if love.keyboard.isDown('down') then
-        self.paddle.x = self.balls[1].x - self.paddle.width / 2
-    end
+--     this was used for testing hehe
+--     if love.keyboard.isDown('down') then
+--         self.paddle.x = self.balls[1].x - self.paddle.width / 2
+--     end
 
     if self.paused then
         if love.keyboard.wasPressed('space') then
